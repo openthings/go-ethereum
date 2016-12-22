@@ -1,1 +1,1 @@
-docker build -t openthings/rpi-ethereum -f ./Dockerfile-rpi-alpine .
+docker build -t openthings/rpi-ethereum -f ./docker/Dockerfile-rpi-alpine .
