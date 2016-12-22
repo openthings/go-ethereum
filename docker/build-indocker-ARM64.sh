@@ -1,1 +1,1 @@
-docker build -t openthings/ethereum:ARM64 -f ./Dockerfile-ARM64 .
+docker build -t openthings/ethereum:ARM64 -f ./Dockerfile-ARM64-alpine .
