@@ -1,0 +1,29 @@
+#!/bin/bash -x
+
+export HOSTROOT=/media/linaro/zdata/ethereum
+export DOCKERIMAGE=openthings/ethereum:ARM64
+
+echo
+echo "=================================================="
+echo "Ethereum devnet starting... "
+echo "Ethereum running at $echo HOSTROOT"
+echo "=================================================="
+
+# Generate and store a wallet password
+if [ ! -f $HOSTROOT/.accountpassword ]; then
+    echo `date +%s | sha256sum | base64 | head -c 32` > $HOSTROOT/.accountpassword
+fi
+
+if [ ! -f $HOSTROOT/.primaryaccount ]; then
+  docker run --rm -v $HOSTROOT:/root \
+    $DOCKERIMAGE --dev \
+    --password /root/.accountpassword \
+    account new > /root/.primaryaccount
+fi
+
+docker run -d --name ethedev --restart=always -v $HOSTROOT:/root \
+  $DOCKERIMAGE --dev \
+  --rpc --rpcaddr "0.0.0.0" --rpccorsdomain "*" --rpcapi "db,eth,net,web3,personal" \
+  --password /root/.accountpassword \
+  --mine --minerthreads 1 \
+  --extradata "openthings"
